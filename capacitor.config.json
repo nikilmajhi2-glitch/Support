@@ -1,0 +1,6 @@
+{
+  "appId": "com.rupeedesk.app",
+  "appName": "Rupeedesk",
+  "webDir": "www",
+  "bundledWebRuntime": false
+}

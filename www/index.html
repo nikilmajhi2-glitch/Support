@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rupeedesk - Task & Earn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <main id="home-page" class="page-content active">
+            <header class="header">
+                <h1 class="welcome-text">welcome to RUPEEDESK!</h1>
+                <div class="invite-code-wrapper">
+                    <span>Invite Code: <strong id="referral-code">LOADING...</strong></span>
+                    <button id="copy-referral-btn"><i class="fa-regular fa-copy"></i> Copy</button>
+                </div>
+            </header>
+            <section class="balance-card">
+                <p class="balance-title">Current Balance</p>
+                <div class="balance-amount">
+                    <i class="fas fa-coins coin-icon"></i>
+                    <span id="coin-balance">₹0.00</span>
+                </div>
+            </section>
+            <section class="withdraw-section">
+                <button id="withdraw-btn" class="withdraw-button">Withdraw</button>
+            </section>
+
+            <section class="rewards-grid">
+                <div id="daily-spin-btn" class="reward-item">
+                    <i class="fa-solid fa-dharmachakra"></i>
+                    <span>Daily Spin</span>
+                </div>
+                <div class="reward-item" style="opacity: 0.5; cursor: not-allowed;">
+                    <i class="fa-solid fa-gift"></i>
+                    <span>Coming Soon</span>
+                </div>
+            </section>
+
+            <h3 class="tasks-title">Available Tasks</h3>
+            <section id="task-list" class="task-list-container">
+                <div class="task-card">
+                    <div class="task-info">
+                        <div class="task-icon sms-icon"><i class="fa-solid fa-comment-sms"></i></div>
+                        <div class="task-details">
+                            <h3>SMS Task</h3>
+                            <p>Send assigned SMS & earn ₹0.17 per message.</p>
+                        </div>
+                    </div>
+                    <button id="assign-sms-btn" class="task-action-btn">Start Task</button>
+                </div>
+
+                <p class="text-center text-sm text-gray-500 mt-2">Daily SMS Limit: <span id="sms-count">0</span>/100</p>
+
+                <!-- ✅ ADDED: SMS progress bar -->
+                <div id="sms-progress-wrapper" class="hidden mt-3">
+                    <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                        <div id="sms-progress-bar" class="h-full bg-green-500" style="width:0%"></div>
+                    </div>
+                    <p id="sms-progress-text" class="text-sm text-center text-gray-600 mt-1">0 / 0</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

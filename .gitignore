@@ -1,9 +1,24 @@
-
+# Node / JS
 node_modules/
-android/
-ios/
-.build/
 dist/
+.build/
 *.log
 .vscode/
 .env
+
+# Android build artifacts
+android/.gradle/
+android/.idea/
+android/build/
+android/app/build/
+android/capacitor-cordova-android-plugins/
+android/local.properties
+
+# ✅ Keep these Android source folders (so your Kotlin code is pushed)
+!android/app/src/main/
+!android/app/src/main/AndroidManifest.xml
+!android/app/src/main/java/**
+!android/app/src/main/res/**
+
+# iOS (if any)
+ios/

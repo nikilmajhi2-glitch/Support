@@ -1,4 +1,4 @@
-name: Build Android APK (Capacitor v5)
+name: Build Android APK (Auto-Gradle)
 
 on:
   push:
@@ -13,61 +13,62 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🧩 Checkout repository
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
-      - name: 📦 Install npm dependencies
+      - name: Install NPM dependencies
         run: npm install
 
-      - name: ☕ Setup JDK 17
+      - name: Setup JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: 17
 
-      - name: 🧰 Setup Android SDK
+      - name: Setup Android SDK
         uses: android-actions/setup-android@v2
         with:
-          api-level: 33
-          build-tools: 33.0.2
+          api-level: 34
+          build-tools: 34.0.0
           components: |
             platform-tools
-            build-tools;33.0.2
-            platforms;android-33
+            build-tools;34.0.0
+            platforms;android-34
 
-      - name: ✅ Accept licenses
+      - name: Accept licenses
         run: yes | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
-      - name: ⚡ Install Capacitor CLI
-        run: npm install -g @capacitor/cli@5.7.8
-
-      - name: ⚙️ Install Capacitor Android runtime
-        run: npm install @capacitor/android@5.7.8 --legacy-peer-deps
-
-      - name: 🏗 Add Android platform (if missing)
+      - name: Install Capacitor CLI & Android Platform
         run: |
-          if [ ! -d "android" ]; then
-            npx cap add android
+          npm install -g @capacitor/cli@5
+          npm install @capacitor/android@5
+          npx cap sync android
+
+      - name: Ensure Gradle wrapper exists
+        run: |
+          cd android
+          if [ ! -f "gradlew" ]; then
+            echo "Gradle wrapper not found — generating..."
+            gradle wrapper
           else
-            echo "✅ Android platform already exists."
+            echo "Gradle wrapper already exists."
           fi
 
-      - name: 🔄 Sync Capacitor project
-        run: npx cap sync android
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
 
-      - name: 🧱 Build Debug APK
-        working-directory: android
+      - name: Build Debug APK
         run: |
-          chmod +x ./gradlew
+          cd android
           ./gradlew assembleDebug --no-daemon
 
-      - name: 📤 Upload APK artifact
+      - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Rupeedesk-APK
+          name: Rupeedesk-Debug-APK
           path: android/app/build/outputs/apk/debug/app-debug.apk

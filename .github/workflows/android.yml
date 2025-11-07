@@ -1,4 +1,4 @@
-name: Build Android APK (Auto-Gradle)
+name: Build Android APK (Capacitor Auto-Android)
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -43,29 +43,30 @@ jobs:
       - name: Accept licenses
         run: yes | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
-      - name: Install Capacitor CLI & Android Platform
+      - name: Install Capacitor CLI & Android platform
         run: |
           npm install -g @capacitor/cli@5
           npm install @capacitor/android@5
+          if [ ! -d "android/app" ]; then
+            echo "Android platform not found. Adding now..."
+            npx cap add android
+          else
+            echo "Android platform already exists."
+          fi
           npx cap sync android
 
       - name: Ensure Gradle wrapper exists
         run: |
           cd android
           if [ ! -f "gradlew" ]; then
-            echo "Gradle wrapper not found — generating..."
             gradle wrapper
-          else
-            echo "Gradle wrapper already exists."
           fi
 
       - name: Make gradlew executable
         run: chmod +x android/gradlew
 
       - name: Build Debug APK
-        run: |
-          cd android
-          ./gradlew assembleDebug --no-daemon
+        run: cd android && ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4

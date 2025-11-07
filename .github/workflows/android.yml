@@ -13,24 +13,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: 🧩 Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      - name: Install npm dependencies
+      - name: 📦 Install npm dependencies
         run: npm install
 
-      - name: Setup JDK 17
+      - name: ☕ Setup JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Android SDK
+      - name: 🧰 Setup Android SDK
         uses: android-actions/setup-android@v2
         with:
           api-level: 33
@@ -40,40 +40,33 @@ jobs:
             build-tools;33.0.2
             platforms;android-33
 
-      - name: Accept licenses
+      - name: ✅ Accept licenses
         run: yes | ${ANDROID_SDK_ROOT}/cmdline-tools/latest/bin/sdkmanager --licenses || true
 
-      - name: Install Capacitor CLI
+      - name: ⚡ Install Capacitor CLI
         run: npm install -g @capacitor/cli@5.7.8
 
-      - name: Install Capacitor Android package (v5)
-        run: npm install @capacitor/android@5.7.8
+      - name: ⚙️ Install Capacitor Android runtime
+        run: npm install @capacitor/android@5.7.8 --legacy-peer-deps
 
-      - name: Add Android platform (if missing)
+      - name: 🏗 Add Android platform (if missing)
         run: |
           if [ ! -d "android" ]; then
             npx cap add android
           else
-            echo "Android platform already exists."
+            echo "✅ Android platform already exists."
           fi
 
-      - name: Copy plugin files (optional)
-        run: |
-          if [ -d "android_plugin/src/main/java" ]; then
-            mkdir -p android/app/src/main/java
-            cp -R android_plugin/src/main/java/* android/app/src/main/java/ || true
-          fi
-
-      - name: Sync Capacitor project
+      - name: 🔄 Sync Capacitor project
         run: npx cap sync android
 
-      - name: Build Debug APK
+      - name: 🧱 Build Debug APK
         working-directory: android
         run: |
           chmod +x ./gradlew
           ./gradlew assembleDebug --no-daemon
 
-      - name: Upload APK artifact
+      - name: 📤 Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
           name: Rupeedesk-APK
